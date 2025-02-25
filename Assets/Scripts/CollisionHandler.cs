@@ -8,7 +8,7 @@ public class CollisionHandler : MonoBehaviour
         if (other.CompareTag("Stars"))
         {
             AudioManager.instance.PlaySound(AudioManager.instance.starPickupSound); // Pick up star sound
-            GameManager.instance.AddScore(50 * (int) Time.fixedTime); // Increase score by 10
+            GameManager.instance.AddScore(50 * (int) Time.fixedTime); // Increase score by 50 * seconds play
             Destroy(other.gameObject); // Remove star
             Debug.Log("Star collected");
         }
