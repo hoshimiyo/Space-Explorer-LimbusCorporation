@@ -12,7 +12,15 @@ public class CollisionHandler : MonoBehaviour
             Destroy(other.gameObject); // Remove star
             Debug.Log("Star collected");
         }
-        else if (other.CompareTag("Asteroids") || other.CompareTag("BigAsteroid")) 
+        else if (other.CompareTag("Boss"))
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
+            Destroy(gameObject); // Remove player
+            Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
+            GameManager.instance.GameOver(); // Trigger game over
+            Debug.Log("skill issue");
+        }
+        else if (other.CompareTag("Asteroids") || other.CompareTag("BigAsteroid") || other.CompareTag("Enemies")) // Detect asteroid, big asteroid, or enemy laser
         {
             AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
             Destroy(other.gameObject); // Remove asteroid

@@ -1,27 +1,76 @@
+using System.Collections;
 using UnityEngine;
 
 public class BossBehavior : BaseEnemyBehavior
 {
+    private bool entering = true;
+    [SerializeField] private float stopYPosition = 271f; // Y position where the boss stops moving
     // public GameObject minionPrefab;
 
     protected override void Start()
     {
-        moveSpeed = 2f;
-        health = 10;
+        moveSpeed = 100f;
+        health = 100;
         fireRate = 1f;
+        EnterScreen(moveSpeed);
         base.Start();
 
         // InvokeRepeating("SpawnMinions", 5f, 10f);
     }
 
+    protected override void Update()
+    {
+        if (!entering)
+        {
+            base.Update();
+        }
+    }
+
+    public void EnterScreen(float speed)
+    {
+        StartCoroutine(FlyIntoScreen(speed));
+    }
+
+    IEnumerator FlyIntoScreen(float speed)
+    {
+        while (transform.position.y > stopYPosition)
+        {
+            transform.position += Vector3.down * speed * Time.deltaTime;
+            yield return null;
+        }
+
+        entering = false; // Boss has entered the screen
+    }
+
+    protected override void HoverLeftRight()
+    {
+        float hoverDistance = 380f; // Adjust how far it moves left and right
+        float hoverSpeed = 1f; // Adjust how fast it moves
+
+        float xPosition = Mathf.Sin(Time.time * hoverSpeed) * hoverDistance;
+        transform.position = new Vector3(startPosition.x + xPosition, transform.position.y, transform.position.z);
+    }
+
     protected override void FireLaser()
     {
-        float angleStep = 15f;
-        for (int i = -1; i <= 1; i++)
+        int numberOfLasers = 5; // Number of lasers fired at once
+        float angleStep = 15f; // Angle difference between lasers
+        float startAngle = -30f; // Starting angle for spread
+
+        foreach (Transform firePoint in firePoints)
         {
-            GameObject laser = Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
-            laser.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(i * angleStep, -5f);
+            for (int i = 0; i < numberOfLasers; i++)
+            {
+                float angle = startAngle + (i * angleStep);
+                Quaternion rotation = Quaternion.Euler(0, 0, angle); // Rotate the laser
+                GameObject laser = Instantiate(laserPrefab, firePoint.position, rotation);
+
+                // Set the laser's velocity in the direction of the angle
+                Vector2 direction = new Vector2(Mathf.Sin(angle * Mathf.Deg2Rad), -Mathf.Cos(angle * Mathf.Deg2Rad));
+                laser.GetComponent<Rigidbody2D>().linearVelocity = direction * 5f;
+            }
         }
+
     }
 
     // void SpawnMinions()

@@ -3,22 +3,30 @@ using UnityEngine;
 
 public class BaseEnemyBehavior : MonoBehaviour
 {
-    [SerializeField] protected float moveSpeed = 3f;    
+    [SerializeField] protected float moveSpeed = 3f;
     [SerializeField] protected int health = 3;
     [SerializeField] protected GameObject laserPrefab;
-    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected Transform[] firePoints;
     [SerializeField] protected float fireRate = 2f;
     [SerializeField] protected bool canMove = true;
-    
+    [SerializeField] protected Vector3 startPosition;
+
+
     protected SpriteRenderer spriteRenderer;
     protected Color originalColor;
 
-    protected virtual void Start()
+    private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color;
-
-        if (firePoint != null)
+        if (spriteRenderer != null)
+        {
+            originalColor = spriteRenderer.color;
+        }
+    }
+    protected virtual void Start()
+    {
+        startPosition = transform.position; // Save the initial position
+        if (firePoints != null)
         {
             InvokeRepeating("FireLaser", fireRate, fireRate);
         }
@@ -34,13 +42,18 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     protected virtual void HoverLeftRight()
     {
-        float moveDirection = Mathf.Sin(Time.time * moveSpeed);
-        transform.position += new Vector3(moveDirection * Time.deltaTime, 0, 0);
+        float hoverDistance = 3f; // Adjust how far it moves left and right
+        float hoverSpeed = 2f; // Adjust how fast it moves
+
+        float xPosition = Mathf.Sin(Time.time * hoverSpeed) * hoverDistance;
+        transform.position = new Vector3(startPosition.x + xPosition, transform.position.y, transform.position.z);
     }
+
 
     protected virtual void FireLaser()
     {
-        Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
+        foreach (Transform firePoint in firePoints)
+            Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
     }
 
     public virtual void TakeDamage()

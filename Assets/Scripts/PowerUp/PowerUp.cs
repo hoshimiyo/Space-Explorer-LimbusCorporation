@@ -44,6 +44,10 @@ public class PowerUp : MonoBehaviour
             ApplyPowerUp(other.gameObject);
             Destroy(gameObject); // Remove the power-up after collection
         }
+        else
+        {
+            Physics2D.IgnoreCollision(other, GetComponent<Collider2D>());
+        } 
     }
 
     void ApplyPowerUp(GameObject ship)
