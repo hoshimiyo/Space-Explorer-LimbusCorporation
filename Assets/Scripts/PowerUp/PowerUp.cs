@@ -59,7 +59,7 @@ public class PowerUp : MonoBehaviour
                 shipControl.ActivateShield();
                 break;
             case PowerUpType.LaserPenetrate:
-                shipControl.LaserPenetrate();
+                shipControl.LaserFireRateUp();
                 break;
         }
     }

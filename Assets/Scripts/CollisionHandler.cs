@@ -19,7 +19,7 @@ public class CollisionHandler : MonoBehaviour
             Destroy(gameObject); // Remove player
             Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
             GameManager.instance.GameOver(); // Trigger game over
-            Debug.Log("died");
+            Debug.Log("skill issue");
         }
     }
 }
