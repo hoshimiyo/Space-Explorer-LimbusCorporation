@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ShipControl : MonoBehaviour
@@ -48,5 +49,20 @@ public class ShipControl : MonoBehaviour
     {
         AudioManager.instance.PlaySound(AudioManager.instance.laserSound);
         Instantiate(laserPrefab, laserSpawnPoint.position, laserSpawnPoint.rotation);
+    }
+
+    internal void LaserPenetrate()
+    {
+        Debug.Log("Laser penetrate power-up activated");
+    }
+
+    internal void ActivateShield()
+    {
+        Debug.Log("Shield power-up activated");
+    }
+
+    internal void StartLaserSpread()
+    {
+        Debug.Log("Laser spread power-up activated");
     }
 }

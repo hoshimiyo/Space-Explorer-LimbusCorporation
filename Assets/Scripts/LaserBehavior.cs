@@ -22,6 +22,12 @@ public class LaserBehavior : MonoBehaviour
             Destroy(gameObject); // Destroy the laser itself
             Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
             GameManager.instance.AddScore(10); // Increase score by 10
+        }    
+        else if (other.CompareTag("BigAsteroid")) // Detect big asteroid
+        {
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
+            other.GetComponent<BigAsteroidBehavior>().TakeDamage();
+            Destroy(gameObject); // Destroy the laser
         }
     }
 }

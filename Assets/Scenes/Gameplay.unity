@@ -251,6 +251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 362766091}
   - component: {fileID: 362766090}
+  - component: {fileID: 362766092}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -286,6 +287,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &362766092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362766089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delayBeforeTransition: 45
+  nextSceneName: Level2
 --- !u!1 &854844062
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,12 +496,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5602971309154568236, guid: 74b61602c6fa8b146a46177d45b56c1e, type: 3}
-  spawnInterval: 10
-  speedIncreaseRate: 15
+  bigAsteroidPrefab: {fileID: 2907649277341883029, guid: 7780798bcc3b7754e90938fdb8b274e8, type: 3}
+  spawnInterval: 4
+  speedIncreaseRate: 20
   spawnRateIncrease: 0.5
   maxSpeed: 200
   minSpeed: 80
-  destroyY: -400
+  bigAsteroidChance: 0.2
   currentSpeed: 0
   currentInterval: 0
 --- !u!1 &1211664614
@@ -916,7 +932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa3a6d8fa8b4c04ab923a42706bd2a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 325
+  moveSpeed: 335
   laserPrefab: {fileID: 7221946140573901543, guid: 348dfc9e09d737d4282a342d733de75a, type: 3}
   laserSpawnPoint: {fileID: 1694040316}
 --- !u!212 &1694040315

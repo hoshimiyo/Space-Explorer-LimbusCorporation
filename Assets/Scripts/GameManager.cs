@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     void Start()
     {
         // Initialize the score display
