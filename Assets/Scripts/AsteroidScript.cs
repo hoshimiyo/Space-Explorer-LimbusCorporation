@@ -1,15 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AsteroidSpawner : MonoBehaviour
 {
     public GameObject asteroidPrefab;  // Reference to the asteroid prefab
     public GameObject bigAsteroidPrefab;
-    public float spawnInterval = 4f;   // Initial time between asteroid spawns
-    public float speedIncreaseRate = 20f; // How much speed increases over time
-    public float spawnRateIncrease = 0.5f; // How much spawn rate increases over time
-    public float maxSpeed = 200f;       // Maximum falling speed
-    public float minSpeed = 80f;        // Initial falling speed
-    public float bigAsteroidChance = 0.2f; // 20% chance to spawn a big asteroid
+    [SerializeField] private float spawnInterval = 4f;   // Initial time between asteroid spawns
+    [SerializeField] private float speedIncreaseRate = 20f; // How much speed increases over time
+    [SerializeField] private float spawnRateIncrease = 0.5f; // How much spawn rate increases over time
+    [SerializeField] private float maxSpeed = 200f;       // Maximum falling speed
+    [SerializeField] private float minSpeed = 80f;        // Initial falling speed
+    [SerializeField] private float bigAsteroidChance = 0.2f; // 20% chance to spawn a big asteroid
+
     [SerializeField]
     private float currentSpeed;   // Current speed of falling asteroids
     [SerializeField]
@@ -17,10 +19,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Start()
     {
-        currentSpeed = minSpeed;
-        currentInterval = spawnInterval;
-        InvokeRepeating("SpawnAsteroid", 0f, currentInterval); // Start spawning asteroids
-        InvokeRepeating("IncreaseDifficulty", 5f, 5f); // Increase difficulty over time
+        AdjustSpawnerSettings();
     }
 
     void SpawnAsteroid()
@@ -69,5 +68,26 @@ public class AsteroidSpawner : MonoBehaviour
         // Restart asteroid spawning with updated interval
         CancelInvoke("SpawnAsteroid");
         InvokeRepeating("SpawnAsteroid", 0f, currentInterval);
+    }
+
+    void AdjustSpawnerSettings()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        switch (sceneName)
+        {
+            case "Gameplay":
+                currentSpeed = minSpeed;
+                currentInterval = spawnInterval;
+                InvokeRepeating("SpawnAsteroid", 0f, currentInterval); // Start spawning asteroids
+                InvokeRepeating("IncreaseDifficulty", 5f, 5f); // Increase difficulty over time
+                break;
+            default:
+                currentSpeed = minSpeed;
+                currentInterval = spawnInterval;
+                InvokeRepeating("SpawnAsteroid", 0f, currentInterval); // Start spawning asteroids
+                break;
+        }
+
     }
 }

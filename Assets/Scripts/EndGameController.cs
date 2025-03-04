@@ -11,6 +11,7 @@ public class EndGameController : MonoBehaviour
         // Retrieve the final score from GameManager
         int finalScore = GameManager.instance.GetScore();
         finalScoreText.text = "Final Score: " + finalScore; // Display the final score
+        Destroy(GameManager.instance.gameObject); // Destroy the GameManager object 
     }
 
     public void RestartGame()

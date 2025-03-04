@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    [SerializeField] float delayBeforeTransition = 5f; // Time before switching scene
-    public string nextSceneName; // Set this in the Inspector
+    [SerializeField] float delayBeforeTransition = 45f; // Time before switching scene
+    [SerializeField] private string nextSceneName;
 
     void Start()
     {
@@ -12,7 +12,7 @@ public class SceneTransition : MonoBehaviour
     }
 
     void LoadNextScene()
-    {
+    {    
         SceneManager.LoadScene(nextSceneName);
     }
 }

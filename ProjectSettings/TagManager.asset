@@ -9,6 +9,7 @@ TagManager:
   - BigAsteroid
   - Bullet
   - Present
+  - Enemies
   layers:
   - Default
   - TransparentFX

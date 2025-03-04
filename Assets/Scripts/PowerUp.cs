@@ -23,8 +23,6 @@ public class PowerUp : MonoBehaviour
 
     void SetPowerUpColor()
     {
-        Color powerUpColor = Color.white;
-
         switch (powerUpType)
         {
             case PowerUpType.LaserSpread:

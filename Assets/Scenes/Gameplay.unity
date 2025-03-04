@@ -251,7 +251,6 @@ GameObject:
   m_Component:
   - component: {fileID: 362766091}
   - component: {fileID: 362766090}
-  - component: {fileID: 362766092}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -271,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f40893db86d2ad4281672ae8cd9a433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 1635917797}
+  score: 0
 --- !u!4 &362766091
 Transform:
   m_ObjectHideFlags: 0
@@ -287,20 +286,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &362766092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 362766089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayBeforeTransition: 45
-  nextSceneName: Level2
 --- !u!1 &854844062
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +490,52 @@ MonoBehaviour:
   bigAsteroidChance: 0.2
   currentSpeed: 0
   currentInterval: 0
+--- !u!1 &1201287724
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1201287726}
+  - component: {fileID: 1201287725}
+  m_Layer: 0
+  m_Name: SceneTransition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1201287725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201287724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delayBeforeTransition: 15
+  nextSceneName: Level2
+--- !u!4 &1201287726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201287724}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1211664614
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,6 +804,7 @@ GameObject:
   - component: {fileID: 1635917796}
   - component: {fileID: 1635917798}
   - component: {fileID: 1635917797}
+  - component: {fileID: 1635917799}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -898,6 +930,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635917795}
   m_CullTransparentMesh: 1
+--- !u!114 &1635917799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635917795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f69205a764163a4aaa8afc98e0d3f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1694040313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1451,3 +1495,4 @@ SceneRoots:
   - {fileID: 2036024538}
   - {fileID: 1437847565}
   - {fileID: 1874975260}
+  - {fileID: 1201287726}

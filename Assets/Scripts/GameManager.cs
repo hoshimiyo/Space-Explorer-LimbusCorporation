@@ -5,9 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText; // UI Text to display score
     public static GameManager instance; // Singleton pattern
-    private int score = 0; // Player’s score
+    public int score = 0; // Player’s score
     // public GameObject pausePanel; // UI panel to show when the game pauses
     void Awake()
     {
@@ -15,6 +14,8 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            SceneManager.sceneLoaded += OnSceneLoaded; // Listen for scene changes
+            DontDestroyOnLoad(instance);
         }
         else
         {
@@ -24,8 +25,13 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-        // Initialize the score display
-        UpdateScore(0);
+        if (SceneManager.GetActiveScene().name == "Gameplay")
+        {
+            // Initialize the score display
+            score = 0;
+            UpdateScoreUI();
+        }
+
         AudioManager.instance.ToggleMusic(true); // Play music
         // pausePanel.SetActive(false); // Hide game over panel at the start
     }
@@ -33,17 +39,26 @@ public class GameManager : MonoBehaviour
     public void AddScore(int value)
     {
         score += value; // Increase the score
-        UpdateScore(score); // Update UI
-    }
-
-    void UpdateScore(int newScore)
-    {
-        scoreText.text = "Score: " + newScore;
+        UpdateScoreUI(); // Update UI
     }
 
     public int GetScore()
     {
         return score;
+    }
+
+    private static void UpdateScoreUI()
+    {
+        ScoreUI scoreUI = FindFirstObjectByType<ScoreUI>();
+        if (scoreUI != null)
+        {
+            scoreUI.UpdateScoreUI();
+        }
+    }
+
+    private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateScoreUI(); // Make sure the UI updates when switching scenes
     }
 
     public void GameOver()
@@ -60,7 +75,7 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.ToggleMusic(false); // Stop music
     }
 
-    void LoadEndGameScene()
+    public void LoadEndGameScene()
     {
         SceneManager.LoadScene("EndGame"); // Load End Game Scene
     }
