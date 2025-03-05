@@ -691,9 +691,11 @@ MonoBehaviour:
   - {fileID: 1622799766}
   - {fileID: 1168051356}
   fireRate: 2
-  canMove: 1
   startPosition: {x: 0, y: 0, z: 0}
+  explosionPrefab: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
+  scoreValue: 10
   stopYPosition: 271
+  minionPrefab: {fileID: 3664891518696629215, guid: 4e950a041177ddc46b7c4bb2a5764f03, type: 3}
 --- !u!1 &1168051355
 GameObject:
   m_ObjectHideFlags: 0

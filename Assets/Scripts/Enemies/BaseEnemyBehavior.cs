@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class BaseEnemyBehavior : MonoBehaviour
 {
-    [SerializeField] protected float moveSpeed = 3f;
-    [SerializeField] protected int health = 3;
+    protected float moveSpeed = 3f;
+    protected int health = 3;
     [SerializeField] protected GameObject laserPrefab;
     [SerializeField] protected Transform[] firePoints;
-    [SerializeField] protected float fireRate = 2f;
-    [SerializeField] protected bool canMove = true;
-    [SerializeField] protected Vector3 startPosition;
-
+    protected float fireRate = 2f;
+    protected Vector3 startPosition;
+    [SerializeField] protected GameObject explosionPrefab;
+    protected int scoreValue = 10;
 
     protected SpriteRenderer spriteRenderer;
     protected Color originalColor;
@@ -34,9 +34,9 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (canMove)
+        if (transform.position.y < -455)
         {
-            HoverLeftRight();
+            Destroy(gameObject);
         }
     }
 
@@ -75,6 +75,8 @@ public class BaseEnemyBehavior : MonoBehaviour
     protected virtual void DestroyEnemy()
     {
         Destroy(gameObject);
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        GameManager.instance.AddScore(scoreValue);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

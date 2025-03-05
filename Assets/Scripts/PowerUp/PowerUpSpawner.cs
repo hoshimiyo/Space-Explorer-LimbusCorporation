@@ -6,12 +6,16 @@ public class PowerUpSpawner : MonoBehaviour
     public float spawnInterval = 10f;
     public float speed = 20f;
     private float timer;
-
+    public static bool stopSpawner;
     void Update()
     {
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
         {
+            if (stopSpawner)
+            {
+                return;
+            }
             SpawnPowerUp();
             timer = 0;
         }

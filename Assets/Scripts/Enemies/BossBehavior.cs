@@ -5,24 +5,25 @@ public class BossBehavior : BaseEnemyBehavior
 {
     private bool entering = true;
     [SerializeField] private float stopYPosition = 271f; // Y position where the boss stops moving
-    // public GameObject minionPrefab;
+    public GameObject minionPrefab;
 
     protected override void Start()
     {
         moveSpeed = 100f;
         health = 100;
-        fireRate = 1f;
+        fireRate = 4f;
+        scoreValue = 10000;
         EnterScreen(moveSpeed);
         base.Start();
 
-        // InvokeRepeating("SpawnMinions", 5f, 10f);
+        InvokeRepeating("SpawnMinions", 5f, 10f);
     }
 
     protected override void Update()
     {
         if (!entering)
         {
-            base.Update();
+            HoverLeftRight();
         }
     }
 
@@ -73,9 +74,18 @@ public class BossBehavior : BaseEnemyBehavior
 
     }
 
-    // void SpawnMinions()
-    // {
-    //     Instantiate(minionPrefab, transform.position + new Vector3(-1, 0, 0), Quaternion.identity);
-    //     Instantiate(minionPrefab, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
-    // }
+    void SpawnMinions()
+    {
+        Instantiate(minionPrefab, transform.position + new Vector3(-1, 0, 0), Quaternion.identity);
+        Instantiate(minionPrefab, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+    }
+
+    protected override void DestroyEnemy()
+    {
+        CancelInvoke("SpawnMinions");
+        AsteroidSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
+        StarScript.stopSpawner = false; // ✅ Disable spawner before transitioning
+        PowerUpSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
+        base.DestroyEnemy();
+    }
 }

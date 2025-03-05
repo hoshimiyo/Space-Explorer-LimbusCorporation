@@ -16,12 +16,19 @@ public class AsteroidSpawner : MonoBehaviour
     private float currentSpeed;   // Current speed of falling asteroids
     [SerializeField]
     private float currentInterval; // Current spawn interval
-
+    public static bool stopSpawner; // Stop the spawner
     void Start()
     {
         AdjustSpawnerSettings();
     }
 
+    void Update()
+    {
+        if (stopSpawner)
+        {
+            gameObject.SetActive(false);
+        }
+    }
     void SpawnAsteroid()
     {
         // Randomize the spawn position at the top of the screen
@@ -80,7 +87,7 @@ public class AsteroidSpawner : MonoBehaviour
                 currentSpeed = minSpeed;
                 currentInterval = spawnInterval;
                 InvokeRepeating("SpawnAsteroid", 0f, currentInterval); // Start spawning asteroids
-                InvokeRepeating("IncreaseDifficulty", 5f, 5f); // Increase difficulty over time
+                InvokeRepeating("IncreaseDifficulty", 3f, 3f); // Increase difficulty over time
                 break;
             default:
                 currentSpeed = minSpeed;

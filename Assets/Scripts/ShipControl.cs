@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ShipControl : MonoBehaviour
 {
-    public float moveSpeed = 335f;
+    public float moveSpeed = 500f;
     private Vector2 screenBounds;
     private float shipWidth, shipHeight;
     public GameObject laserPrefab;

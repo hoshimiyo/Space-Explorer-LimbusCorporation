@@ -6,8 +6,13 @@ public class StarScript : MonoBehaviour
     public GameObject starPrefab; // Reference to the star prefab
     public float spawnInterval = 8f; // Time interval between spawn checks
     public int initialDelay = 5; // Initial delay before spawning starts
+    public static bool stopSpawner; // Stop the spawner
     void Start()
     {
+        if (stopSpawner)
+        {
+            return;
+        }
         InvokeRepeating("TrySpawnStar", initialDelay, spawnInterval);
     }
 
