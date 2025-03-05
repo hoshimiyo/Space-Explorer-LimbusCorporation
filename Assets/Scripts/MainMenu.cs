@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     }
     public void GoToScene(string sceneName)
     {
+        ShipStat.ResetStat();
+        Debug.Log("play trigger");
         SceneManager.LoadScene(sceneName);
     }
 

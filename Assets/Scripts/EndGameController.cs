@@ -16,7 +16,13 @@ public class EndGameController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("Gameplay"); // Reload gameplay scene
+        //PlayerStats.playerStat.ResetStats();
+        // Reset stats before destroying the GameManager
+        GameManager.instance.ResetPlayerStat();
+        ShipStat.ResetStat();
+
+        // Reload the gameplay scene
+        SceneManager.LoadScene("Gameplay");
     }
 
     public void GoToMainMenu()

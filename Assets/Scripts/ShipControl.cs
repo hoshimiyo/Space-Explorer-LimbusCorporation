@@ -6,65 +6,122 @@ using UnityEngine;
 
 public class ShipControl : MonoBehaviour
 {
-    public float moveSpeed = 335f;
+    private float moveSpeed = 335f;
     private Vector2 screenBounds;
     private float shipWidth, shipHeight;
     public GameObject laserPrefab;
+    public GameObject laserPrefab2;
     public Transform laserSpawnPoint;
-    public float fireRate = 0.5f; // Delay between shots
-    public float baseFireRate = 0.5f;
     private bool canShoot = true;
-    private int laserFireRateLevel = 0;
+    private bool canShootHoming = true;
     private List<LaserBehavior> activeLasers = new List<LaserBehavior>(); // List to track active lasers
-    private bool overloadingState = false; // To check if auto shooting is active
-    private float overloadingStateDuration = 5f; // Duration of auto shooting
-    private float overloadingStateTimer = 0f; // Timer to track auto shooting duration
-    private float laserSpreadAngle = 10f; // Angle range for laser spread, in degrees
-    private int laserCount = 1; // Number of lasers 
+    private float overloadingStateTimer = 0f; // Timer to track overloading duration
+    public int laserCount = 1; // Number of lasers 
     private float lastSoundTime = 0f; // Time when the sound was last played
     private float soundCooldown = 0.1f; // Cooldown between sounds (in seconds)
+    private float iFrameTimer = 0f;
+    private float overkillStateTimer = 0f; // Timer to track seeker mode duration
+    private SpriteRenderer shipRenderer; // Reference to the SpriteRenderer
+    private Color originalColor;
+    private Coroutine blinkCoroutine; // Coroutine reference for blinking effect
 
 
     void Start()
     {
+        //health = PlayerStats.playerStat.health;
+        //iFrameDuration = PlayerStats.playerStat.iFrameDuration;
         // Get the screen bounds in world coordinates
         Camera mainCamera = Camera.main;
         screenBounds = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
 
         // Get spaceship size
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        shipWidth = sr.bounds.extents.x; // Half of the width
-        shipHeight = sr.bounds.extents.y; // Half of the height
+        shipRenderer = GetComponent<SpriteRenderer>();
+        shipWidth = shipRenderer.bounds.extents.x; // Half of the width
+        shipHeight = shipRenderer.bounds.extents.y; // Half of the height
+        if (shipRenderer != null)
+        {
+            originalColor = shipRenderer.color;
+        }
     }
 
 
     void Update()
     {
         MoveShip();
+        if (canShoot) StartCoroutine(ShootWithDelay());
 
-        if (!overloadingState && canShoot)
-        {
-            StartCoroutine(ShootWithDelay());
-        }
         // If auto shooting is active, fire continuously
-        if (overloadingState)
+        if (ShipStat.overloadingState)
         {
             overloadingStateTimer -= Time.deltaTime;
-
-            if (overloadingStateTimer > 0f)
+            if (overloadingStateTimer <= 0f)
             {
-                if (canShoot)
-                {
-                    StartCoroutine(ShootWithDelay());
-                }
-            }
-            else
-            {
-                // End auto shooting after 10 seconds
-                overloadingState = false;
-                fireRate = baseFireRate; // Revert to original fire rate after 10 seconds
+                ShipStat.overloadingState = false;
+                ShipStat.fireRateMultiplier = ShipStat.multipliers[ShipStat.laserFireRateLevel]; // Revert to original fire rate
                 Debug.Log("Overloading ended");
             }
+        }
+        // Update invulnerability timer if the ship is invulnerable
+        if (ShipStat.iFrame)
+        {
+            iFrameTimer -= Time.deltaTime;
+            if (iFrameTimer <= 0f)
+            {
+                StopBlinking();
+                ShipStat.iFrame = false; // Reset invulnerability after the time has passed
+                Debug.Log("Iframe ended");
+
+            }
+        }
+        if (ShipStat.overkillState)
+        {
+            if (canShootHoming) StartCoroutine(ShootHomingLaserWithDelay());
+            overkillStateTimer -= Time.deltaTime;
+            if (overkillStateTimer <= 0f)
+            {
+                ShipStat.overkillState = false;
+                Debug.Log("Overkill mode ended.");
+                StopCoroutine(ShootHomingLaserWithDelay());
+            }
+        }
+    }
+    // Blinking effect while the ship is invulnerable
+    private void StartBlinkingRed()
+    {
+        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+        blinkCoroutine = StartCoroutine(BlinkCoroutine());
+    }
+
+    private void StartShielding()
+    {
+        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+        blinkCoroutine = StartCoroutine(ShieldingShip());
+    }
+
+    private void StopBlinking()
+    {
+        // Ensure ship is fully visible when blinking stops
+        shipRenderer.enabled = true;
+        shipRenderer.color = originalColor;
+    }
+
+    private IEnumerator BlinkCoroutine()
+    {
+        while (ShipStat.iFrame)
+        {
+            shipRenderer.color = Color.red;
+            shipRenderer.enabled = !shipRenderer.enabled; // Toggle visibility
+            yield return new WaitForSeconds(0.1f); // Blink interval
+        }
+    }
+
+    private IEnumerator ShieldingShip()
+    {
+        while (ShipStat.iFrame)
+        {
+            // Alternate between the shield color and original color
+            shipRenderer.color = new Color(0f / 255f, 0f / 255f, 255f / 255f);
+            yield return null;
         }
     }
 
@@ -72,8 +129,16 @@ public class ShipControl : MonoBehaviour
     {
         canShoot = false;
         ShootLaser();
-        yield return new WaitForSeconds(fireRate);
+        yield return new WaitForSeconds(ShipStat.fireRate * ShipStat.fireRateMultiplier);
         canShoot = true;
+    }
+
+    IEnumerator ShootHomingLaserWithDelay()
+    {
+        canShootHoming = false;
+        ShootHomingLaser();
+        yield return new WaitForSeconds(ShipStat.homingLaserFireRate);
+        canShootHoming = true;
     }
 
     void MoveShip()
@@ -97,14 +162,12 @@ public class ShipControl : MonoBehaviour
             AudioManager.instance.PlaySound(AudioManager.instance.laserSound);
             lastSoundTime = Time.time; // Update the last sound play time
         }
-
         // Fire a laser with a random spread when in overloading state
-        if (overloadingState)
+        if (ShipStat.overloadingState)
         {
-            for (int i = 0; i < laserCount; i++)
+            for (int i = 0; i < 3; i++)
             {
-
-                float randomAngle = UnityEngine.Random.Range(-laserSpreadAngle, laserSpreadAngle); // Generate random angle within the spread range
+                float randomAngle = UnityEngine.Random.Range(-ShipStat.laserSpreadAngle, ShipStat.laserSpreadAngle); // Generate random angle within the spread range
                 Quaternion rotation = laserSpawnPoint.rotation * Quaternion.Euler(0, 0, randomAngle);
                 Instantiate(laserPrefab, laserSpawnPoint.position, rotation);
             }
@@ -112,51 +175,57 @@ public class ShipControl : MonoBehaviour
         else
         {
             // Fire lasers with an even spread when not in overloading state
-            if (laserCount > 1)
+            if (ShipStat.laserCount > 1)
             {
-                float spreadStep = laserSpreadAngle / (laserCount - 1); // Calculate the angle step for each laser
-                for (int i = 0; i < laserCount; i++)
+                float spreadStep = ShipStat.laserSpreadAngle / (ShipStat.laserCount - 1); // Calculate the angle step for each laser
+                for (int i = 0; i < ShipStat.laserCount; i++)
                 {
                     // Calculate the angle for each laser evenly distributed
-                    float evenAngle = -laserSpreadAngle / 2 + spreadStep * i; // Evenly distribute lasers within the range
+                    float evenAngle = -ShipStat.laserSpreadAngle / 2 + spreadStep * i; // Evenly distribute lasers within the range
                     Quaternion rotation = laserSpawnPoint.rotation * Quaternion.Euler(0, 0, evenAngle);
                     Instantiate(laserPrefab, laserSpawnPoint.position, rotation);
-
                 }
             }
             //Fire a single laser with no spread 
             else Instantiate(laserPrefab, laserSpawnPoint.position, laserSpawnPoint.rotation);
         }
     }
+    void ShootHomingLaser()
+    {
+        // Fire homing lasers with an even spread (only during overkill mode)
+        float spreadStep = ShipStat.homingLaserSpreadAngle / (ShipStat.homingLaserCount - 1); // Spread for homing lasers
+        for (int i = 0; i < ShipStat.homingLaserCount; i++)
+        {
+            // Calculate the angle for each homing laser evenly distributed
+            float evenAngle = -ShipStat.homingLaserSpreadAngle / 2 + spreadStep * i;
+            Quaternion rotation = laserSpawnPoint.rotation * Quaternion.Euler(0, 0, evenAngle);
+            Instantiate(laserPrefab2, laserSpawnPoint.position, rotation);
+        }
+    }
 
     internal void LaserFireRateUp()
     {
-        if (laserFireRateLevel <= 3)
+        if (ShipStat.laserFireRateLevel < 3)
         {
-            // Increase fire rate up to 75% max reduction
-            float newFireRate = fireRate * 0.75f;
-            fireRate = Mathf.Max(newFireRate, fireRate * 0.25f);
-            baseFireRate = fireRate;
-            laserFireRateLevel++;
-            Debug.Log("Laser firerate increased to: " + fireRate);
+            ShipStat.laserFireRateLevel++;
+            ShipStat.fireRateMultiplier = ShipStat.multipliers[ShipStat.laserFireRateLevel];
+            Debug.Log("Laser firerate increased to level: " + ShipStat.laserFireRateLevel);
         }
 
-        // On the 4th pickup, enable piercing shots for 10 seconds
-        if (laserFireRateLevel >= 4)
+        // On the 4th pickup, enable overloading
+        else
         {
-            //fireRate = baseFireRate * 0.5f; // 200% fire rate (half the delay time)
             Debug.Log("Max Fire rate reached, overloading begin");
 
-            if (!overloadingState)
+            if (!ShipStat.overloadingState)
             {
-                overloadingState = true;
-                overloadingStateTimer = overloadingStateDuration; // Reset the auto-shoot duration to full
-                fireRate = baseFireRate * 0.1f; // Set fire rate to 1000% ?
-
+                ShipStat.overloadingState = true;
+                overloadingStateTimer = ShipStat.overloadingStateDuration; // Reset the duration to full
+                ShipStat.fireRateMultiplier = ShipStat.overloadingMultiplier;
             }
             else
             {
-                overloadingStateTimer = overloadingStateDuration;
+                overloadingStateTimer = ShipStat.overloadingStateDuration;
                 Debug.Log("Overloading refreshed");
             }
         }
@@ -164,16 +233,72 @@ public class ShipControl : MonoBehaviour
 
     internal void ActivateShield()
     {
-        Debug.Log("Shield power-up activated");
+        if (ShipStat.healthCap > ShipStat.health)
+        {
+            ShipStat.health += 1;
+            Debug.Log("Ship healed to " + ShipStat.health);
+        }
+
+        if (!ShipStat.iFrame)
+        {
+            ShipStat.iFrame = true;
+            iFrameTimer = ShipStat.iFramePowerUpDuration;
+            Debug.Log("Shield granted. Enjoy 3s of iFrame");
+            StartShielding();
+        }
+        else
+        {
+            iFrameTimer = ShipStat.iFramePowerUpDuration;
+            Debug.Log("3 more sec of iFrame");
+        }
     }
 
     internal void StartLaserSpread()
     {
-        if (laserCount < 5)
+        if (ShipStat.laserCount < 5)
         {
-            laserCount += 2;
-            Debug.Log("Laser spread power-up activated");
+            ShipStat.laserCount += 2;
+            Debug.Log($"Laser now spread to {ShipStat.laserCount} shots");
         }
-        else Debug.Log("Laser spread maxed");
+        else
+        {
+            // Enter Overkill mode (seeker laser activation)
+            if (!ShipStat.overkillState)
+            {
+                ShipStat.overkillState = true;
+                overkillStateTimer = ShipStat.overkillStateDuration;
+                Debug.Log("Max Laser spread reached. Overkill time");
+            }
+            else
+            {
+                overkillStateTimer = ShipStat.overkillStateDuration; // Refresh duration
+                Debug.Log("Overkill mode refreshed");
+            }
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (ShipStat.iFrame) return;
+        if (ShipStat.laserCount > 1) ShipStat.laserCount -= 2;
+        if (ShipStat.laserFireRateLevel > 0) ShipStat.fireRateMultiplier = ShipStat.multipliers[ShipStat.laserFireRateLevel - 1];
+
+        ShipStat.health = ShipStat.health - damage;
+        //PlayerStats.playerStat.health = health; // Update GameManager's shipHealthPoint
+
+        if (ShipStat.health <= 0)
+        {
+            Destroy(gameObject); // Destroy the player ship
+            Instantiate(GameManager.instance.explosionPrefab, gameObject.transform.position, Quaternion.identity); // Explosion effect
+            GameManager.instance.GameOver(); // Trigger game over
+        }
+        else
+        {
+            // Trigger invulnerability for 2 seconds after taking damage
+            ShipStat.iFrame = true;
+            Debug.Log("IFrame on, HP at: " + ShipStat.health);
+            iFrameTimer = ShipStat.iFrameDuration;
+            StartBlinkingRed();
+        }
     }
 }

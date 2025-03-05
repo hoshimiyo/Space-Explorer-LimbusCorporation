@@ -20,13 +20,16 @@ public class CollisionHandler : MonoBehaviour
             GameManager.instance.GameOver(); // Trigger game over
             Debug.Log("skill issue");
         }
-        else if (other.CompareTag("Asteroids") || other.CompareTag("BigAsteroid") || other.CompareTag("Enemies")) // Detect asteroid, big asteroid, or enemy laser
+        else if (other.CompareTag("Asteroids") || other.CompareTag("Enemies")) // Detect asteroid, big asteroid, or enemy laser
         {
             AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
-            Destroy(other.gameObject); // Remove asteroid
-            Destroy(gameObject); // Remove player
-            Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
-            GameManager.instance.GameOver(); // Trigger game over
+            other.GetComponent<AsteroidBehavior>().TakeDamage(3);
+            GetComponent<ShipControl>().TakeDamage(1);
+        }
+        else if (other.CompareTag("BigAsteroid"))
+        {
+            other.GetComponent<BigAsteroidBehavior>().TakeDamage(3);
+            GetComponent<ShipControl>().TakeDamage(3);
             Debug.Log("skill issue");
         }
     }

@@ -3,16 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    [SerializeField] float delayBeforeTransition = 45f; // Time before switching scene
-    [SerializeField] private string nextSceneName;
+    [SerializeField] private int scoreThreshold = 1000;  // The score threshold required to transition to the next scene
+    [SerializeField] private string nextSceneName;       // The name of the next scene to load
+    private bool transitionStarted = false;  // To ensure the transition only happens once
 
-    void Start()
+    void Update()
     {
-        Invoke("LoadNextScene", delayBeforeTransition);
+        // Check if the score reaches the threshold
+        if (GameManager.instance.GetScore() >= scoreThreshold && !transitionStarted)
+        {
+            transitionStarted = true;  // Set the flag to true to prevent the transition from happening multiple times
+            LoadNextScene();
+        }
     }
 
     void LoadNextScene()
-    {    
-        SceneManager.LoadScene(nextSceneName);
+    {
+        SceneManager.LoadScene(nextSceneName);  // Load the next scene
     }
 }

@@ -10,6 +10,7 @@ public class BaseEnemyBehavior : MonoBehaviour
     [SerializeField] protected float fireRate = 2f;
     [SerializeField] protected bool canMove = true;
     [SerializeField] protected Vector3 startPosition;
+    public GameObject explosionPrefab;
 
 
     protected SpriteRenderer spriteRenderer;
@@ -56,9 +57,9 @@ public class BaseEnemyBehavior : MonoBehaviour
             Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
     }
 
-    public virtual void TakeDamage()
+    public virtual void TakeDamage(int damage)
     {
-        health--;
+        health -= damage;
         StartCoroutine(BlinkRed());
 
         if (health <= 0)
@@ -74,15 +75,7 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     protected virtual void DestroyEnemy()
     {
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
-    }
-
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Laser"))
-        {
-            Destroy(other.gameObject);
-            TakeDamage();
-        }
     }
 }
