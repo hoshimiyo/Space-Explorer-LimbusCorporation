@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         if (progressBar == null) // If not assigned in Inspector, find it
         {
-            progressBar = FindObjectOfType<ProgressBar>();
+            progressBar = FindAnyObjectByType<ProgressBar>();
             if (progressBar == null)
             {
                 Debug.LogError("ProgressBar not found in the scene! Ensure it's added and assigned.");
