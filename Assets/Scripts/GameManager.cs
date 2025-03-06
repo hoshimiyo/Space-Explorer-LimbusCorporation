@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Gameplay")
         {
+            elapsedTime = 0f;
             progressBar.SetMaxValue(survivalTime);
 
             // Initialize the score display
@@ -92,7 +93,7 @@ public class GameManager : MonoBehaviour
             if (elapsedTime >= survivalTime)
             {
                 // Proceed to the next scene
-                SceneManager.LoadScene("Scene2");
+                SceneManager.LoadScene("Level2");
             }
         }
     }

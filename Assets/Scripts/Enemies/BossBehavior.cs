@@ -28,10 +28,12 @@ public class BossBehavior : BaseEnemyBehavior
 
     protected override void Update()
     {
+        progressBar.SetValue(100 - health);
         if (!entering)
         {
             HoverLeftRight();
         }
+
     }
 
     public void EnterScreen(float speed)
@@ -140,20 +142,21 @@ public class BossBehavior : BaseEnemyBehavior
         }
     }
 
-    public override void TakeDamage(int damage)
-    {
-        health -= damage;
-        progressBar.SetValue(health);
+    //public override void TakeDamage(int damage)
+    //{
+    //    health -= damage;
+    //    progressBar.SetValue(health);
+    //    StartCoroutine(BlinkRed());
 
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
+    //    if (health <= 0)
+    //    {
+    //        Die();
+    //    }
+    //}
 
-    void Die()
-    {
-        // Handle boss death (e.g., play animation, load next scene)
-        SceneManager.LoadScene("EndGame");
-    }
+    //void Die()
+    //{
+    //    // Handle boss death (e.g., play animation, load next scene)
+    //    SceneManager.LoadScene("EndGame");
+    //}
 }

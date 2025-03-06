@@ -27,8 +27,14 @@ public class EnemyWaveManager : MonoBehaviour
     {
         transitionPanel.SetActive(false); // Hide the transition panel
         CalculateTotalEnemies();
+        Debug.Log("Total :"+ totalEnemies);
         progressBar.SetMaxValue(totalEnemies); // Set the max value of the progress bar
         StartCoroutine(StartWaves());
+    }
+
+    void Update()
+    {
+        progressBar.SetValue(defeatedEnemies);
     }
 
     void CalculateTotalEnemies()
@@ -88,16 +94,23 @@ public class EnemyWaveManager : MonoBehaviour
         // Make the enemy fly down
         enemy.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, -25f);
 
-        // Update progress bar when an enemy is defeated
-        enemy.GetComponent<BaseEnemyBehavior>().OnEnemyDefeated += () =>
+        // Subscribe to the OnEnemyDefeated event
+        BaseEnemyBehavior enemyBehavior = enemy.GetComponent<BaseEnemyBehavior>();
+        if (enemyBehavior != null)
         {
-            defeatedEnemies++;
-            progressBar.SetValue(defeatedEnemies);
-
-            if (defeatedEnemies >= totalEnemies)
-            {
-                SceneManager.LoadScene("Scene3");
-            }
-        };
+            enemyBehavior.OnEnemyDefeated += HandleEnemyDefeated;
+        }
     }
+
+    void HandleEnemyDefeated()
+    {
+        defeatedEnemies++;
+        Debug.Log("Enemies left: "+ (totalEnemies - defeatedEnemies));
+
+        if (defeatedEnemies >= totalEnemies)
+        {
+            SceneManager.LoadScene("Level3");
+        }
+    }
+
 }
