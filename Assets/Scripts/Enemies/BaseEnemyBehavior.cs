@@ -56,9 +56,9 @@ public class BaseEnemyBehavior : MonoBehaviour
             Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
     }
 
-    public virtual void TakeDamage()
+    public virtual void TakeDamage(int damage)
     {
-        health--;
+        health -= damage;
         StartCoroutine(BlinkRed());
 
         if (health <= 0)
@@ -74,9 +74,8 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     protected virtual void DestroyEnemy()
     {
-        Destroy(gameObject);
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        GameManager.instance.AddScore(scoreValue);
+        Destroy(gameObject);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

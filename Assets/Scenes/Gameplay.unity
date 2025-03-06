@@ -271,6 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  explosionPrefab: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
 --- !u!4 &362766091
 Transform:
   m_ObjectHideFlags: 0
@@ -655,7 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayBeforeTransition: 15
+  scoreThreshold: 1000
   transitionPanel: {fileID: 1303948641}
 --- !u!4 &1201287726
 Transform:
@@ -1340,11 +1341,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa3a6d8fa8b4c04ab923a42706bd2a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 335
   laserPrefab: {fileID: 7221946140573901543, guid: 348dfc9e09d737d4282a342d733de75a, type: 3}
+  laserPrefab2: {fileID: 7221946140573901543, guid: dad2e70b4ea7fd744a1614ddf91bb649, type: 3}
   laserSpawnPoint: {fileID: 1694040316}
-  fireRate: 0.5
-  baseFireRate: 0.5
+  laserCount: 1
 --- !u!212 &1694040315
 SpriteRenderer:
   m_ObjectHideFlags: 0

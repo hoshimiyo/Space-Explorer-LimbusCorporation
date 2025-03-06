@@ -12,13 +12,13 @@ public class ScoreUI : MonoBehaviour
         UpdateScoreUI();
     }
 
-    void Update()
-    {
-        if (scoreText != null)
-        {
-            scoreText.text = "Score: " + GameManager.instance.GetScore();
-        }
-    }
+    //void Update()
+    //{
+    //    if (scoreText != null)
+    //    {
+    //        scoreText.text = "Score: " + GameManager.instance.GetScore();
+    //    }
+    //}
 
     public void UpdateScoreUI()
     {

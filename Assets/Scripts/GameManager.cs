@@ -1,13 +1,14 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // Singleton pattern
     public int score = 0; // Player’s score
-    // public GameObject pausePanel; // UI panel to show when the game pauses
+    public GameObject explosionPrefab;
+
     void Awake()
     {
         // Singleton pattern to ensure only one instance of GameManager exists
@@ -21,8 +22,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
-    
+
     void Start()
     {
         if (SceneManager.GetActiveScene().name == "Gameplay")
@@ -33,13 +35,19 @@ public class GameManager : MonoBehaviour
         }
 
         AudioManager.instance.ToggleMusic(true); // Play music
-        // pausePanel.SetActive(false); // Hide game over panel at the start
     }
 
+    public void ResetPlayerStat()
+    {
+        score = 0;
+    }
     public void AddScore(int value)
     {
         score += value; // Increase the score
         UpdateScoreUI(); // Update UI
+
+        //// Check for score thresholds and load the appropriate scene
+        //CheckScoreThresholds();
     }
 
     public int GetScore()

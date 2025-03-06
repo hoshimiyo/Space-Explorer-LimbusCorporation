@@ -21,7 +21,7 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    void SetPowerUpColor()
+    public void SetPowerUpColor()
     {
         switch (powerUpType)
         {
