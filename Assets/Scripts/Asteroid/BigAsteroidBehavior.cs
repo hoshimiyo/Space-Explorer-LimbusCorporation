@@ -33,6 +33,7 @@ public class BigAsteroidBehavior : MonoBehaviour
 
         baseHealth = baseHealth - damage;
         StartCoroutine(BlinkRed());
+        AudioManager.instance.PlaySound(AudioManager.instance.enemyTakeDamageSound); // Play take damage sound
 
         if (baseHealth <= 0)
         {
@@ -69,6 +70,7 @@ public class BigAsteroidBehavior : MonoBehaviour
     void DestroyAsteroid()
     {
         GameManager.instance.AddScore(20);
+        AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
 

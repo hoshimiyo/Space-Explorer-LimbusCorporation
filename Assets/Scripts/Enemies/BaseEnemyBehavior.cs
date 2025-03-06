@@ -60,12 +60,13 @@ public class BaseEnemyBehavior : MonoBehaviour
     {
         health -= damage;
         StartCoroutine(BlinkRed());
+        AudioManager.instance.PlaySound(AudioManager.instance.enemyTakeDamageSound);
 
         if (health <= 0)
             DestroyEnemy();
     }
 
-    IEnumerator BlinkRed()
+    protected IEnumerator BlinkRed()
     {
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
@@ -75,6 +76,7 @@ public class BaseEnemyBehavior : MonoBehaviour
     public virtual void DestroyEnemy()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
         GameManager.instance.AddScore(scoreValue);
         Destroy(gameObject);
     }

@@ -7,6 +7,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip starPickupSound;
     public AudioClip explosionSound;
     public AudioClip laserSound;
+    public AudioClip powerUpSound;
+    public AudioClip enemyTakeDamageSound;
+    public AudioClip takeDamageSound;
     private AudioSource audioSource;
     public AudioSource backgroundMusicSource;
     public AudioClip backgroundMusic;
