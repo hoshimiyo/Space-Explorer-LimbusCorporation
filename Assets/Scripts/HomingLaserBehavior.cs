@@ -14,6 +14,12 @@ public class HomingLaserBehavior : MonoBehaviour
 
     void Update()
     {
+        // Destroy laser if it goes off-screen
+        if (transform.position.y > 451)
+        {
+            Destroy(gameObject);
+        }
+
         if (target != null)
         {
             // Move towards the target with rotation
@@ -35,11 +41,7 @@ public class HomingLaserBehavior : MonoBehaviour
             transform.Translate(Vector2.up * speed * Time.deltaTime);
         }
 
-        // Destroy laser if it goes off-screen
-        if (transform.position.y > 451)
-        {
-            Destroy(gameObject);
-        }
+
     }
 
 

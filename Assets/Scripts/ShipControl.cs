@@ -102,6 +102,7 @@ public class ShipControl : MonoBehaviour
     private void StopBlinking()
     {
         // Ensure ship is fully visible when blinking stops
+        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
         shipRenderer.enabled = true;
         shipRenderer.color = originalColor;
     }
@@ -122,6 +123,11 @@ public class ShipControl : MonoBehaviour
         {
             // Alternate between the shield color and original color
             shipRenderer.color = new Color(0f / 255f, 0f / 255f, 255f / 255f);
+            if(iFrameTimer <= 1f)
+            {
+                shipRenderer.enabled = !shipRenderer.enabled; // Toggle visibility
+                yield return new WaitForSeconds(0.1f);
+            }
             yield return null;
         }
     }
@@ -240,18 +246,16 @@ public class ShipControl : MonoBehaviour
             Debug.Log("Ship healed to " + ShipStat.health);
         }
 
-        if (!ShipStat.iFrame)
+        if (ShipStat.iFrame)
         {
-            ShipStat.iFrame = true;
-            iFrameTimer = ShipStat.iFramePowerUpDuration;
-            Debug.Log("Shield granted. Enjoy 3s of iFrame");
-            StartShielding();
+            // If already in iframe (blinking red), stop that effect
+            StopBlinking();
         }
-        else
-        {
-            iFrameTimer = ShipStat.iFramePowerUpDuration;
-            Debug.Log("3 more sec of iFrame");
-        }
+
+        ShipStat.iFrame = true;
+        iFrameTimer = ShipStat.iFramePowerUpDuration;
+        Debug.Log("Shield granted. Enjoy " + ShipStat.iFramePowerUpDuration + "s of iFrame");
+        StartShielding(); // Start shielding effect
     }
 
     internal void StartLaserSpread()

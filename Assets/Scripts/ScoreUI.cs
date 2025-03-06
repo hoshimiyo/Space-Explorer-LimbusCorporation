@@ -16,6 +16,7 @@ public class ScoreUI : MonoBehaviour
     void Update()
     {
         LifeUI();
+        UpdateScoreUI();
     }
 
     public void UpdateScoreUI()
