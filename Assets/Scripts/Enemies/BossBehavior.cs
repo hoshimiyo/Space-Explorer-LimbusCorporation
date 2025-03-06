@@ -1,12 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.SceneManagement;
+
 public class BossBehavior : BaseEnemyBehavior
 {
     private bool entering = true;
     [SerializeField] private float stopYPosition = 271f; // Y position where the boss stops moving
     public GameObject minionPrefab;
     public ProgressBar progressBar;
+    [SerializeField] private Transform[] explosionLocation;
+    [SerializeField] private TextMeshProUGUI victoryTitle;
     protected override void Start()
     {
         moveSpeed = 100f;
@@ -84,11 +89,56 @@ public class BossBehavior : BaseEnemyBehavior
 
     public override void DestroyEnemy()
     {
+        StartCoroutine(HandleDestruction());
+        GameManager.instance.AddScore(scoreValue);
+    }
+
+    IEnumerator HandleDestruction()
+    {
+        Invoke(nameof(TransitionToNextScene), 10f); // Call transition BEFORE destroying the enemy
+
+        yield return StartCoroutine(PrepareDestroy()); // Wait for explosions to finish
+
+
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        this.gameObject.GetComponent<Collider2D>().enabled = false;
+
+        yield return new WaitForSeconds(1f);
+
+        victoryTitle.gameObject.SetActive(true);
+    }
+
+    void TransitionToNextScene()
+    {
+        SceneManager.LoadScene("EndGame");
+    }
+
+    IEnumerator PrepareDestroy()
+    {
         CancelInvoke("SpawnMinions");
-        AsteroidSpawner.stopSpawner = false; // Disable spawner before transitioning
-        StarScript.stopSpawner = false; // Disable spawner before transitioning
-        PowerUpSpawner.stopSpawner = false; // Disable spawner before transitioning
-        base.DestroyEnemy();
+        CancelInvoke("HoverLeftRight");
+        CancelInvoke("FireLaser");
+
+        // Disable spawners
+        AsteroidSpawner.stopSpawner = true; // ✅ Disable spawner before transitioning
+        StarScript.stopSpawner = true; // ✅ Disable spawner before transitioning
+        PowerUpSpawner.stopSpawner = true; // ✅ Disable spawner before transitioning
+
+        // Disable movement and collisions
+        this.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        this.GetComponent<Rigidbody2D>().angularVelocity = 0f;
+        this.GetComponent<Collider2D>().enabled = false;
+
+        for (int a = 0; a < 10; a++)
+        {
+            foreach (Transform location in explosionLocation)
+            {
+                Instantiate(explosionPrefab, location.position, Quaternion.identity);
+            }
+            StartCoroutine(BlinkRed());
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 
     public override void TakeDamage(int damage)

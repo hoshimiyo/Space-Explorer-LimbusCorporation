@@ -289,17 +289,20 @@ public class ShipControl : MonoBehaviour
         if (ShipStat.laserFireRateLevel > 0) ShipStat.fireRateMultiplier = ShipStat.multipliers[ShipStat.laserFireRateLevel - 1];
 
         ShipStat.health = ShipStat.health - damage;
+
         //PlayerStats.playerStat.health = health; // Update GameManager's shipHealthPoint
 
         if (ShipStat.health <= 0)
         {
             Destroy(gameObject); // Destroy the player ship
             Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity); // Explosion effect
+            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound          
             GameManager.instance.GameOver(); // Trigger game over
         }
         else
         {
             // Trigger invulnerability for 2 seconds after taking damage
+            AudioManager.instance.PlaySound(AudioManager.instance.takeDamageSound); // Play take damage sound
             ShipStat.iFrame = true;
             Debug.Log("IFrame on, HP at: " + ShipStat.health);
             iFrameTimer = ShipStat.iFrameDuration;

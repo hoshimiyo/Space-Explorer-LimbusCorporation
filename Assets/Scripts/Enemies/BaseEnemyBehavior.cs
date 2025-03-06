@@ -62,19 +62,26 @@ public class BaseEnemyBehavior : MonoBehaviour
     {
         health -= damage;
         StartCoroutine(BlinkRed());
+        AudioManager.instance.PlaySound(AudioManager.instance.enemyTakeDamageSound);
 
         if (health <= 0)
             DestroyEnemy();
     }
 
-    IEnumerator BlinkRed()
+    protected IEnumerator BlinkRed()
     {
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = originalColor;
     }
 
-
+    public virtual void DestroyEnemy()
+    {
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
+        GameManager.instance.AddScore(scoreValue);
+        Destroy(gameObject);
+    }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
@@ -83,15 +90,5 @@ public class BaseEnemyBehavior : MonoBehaviour
             Destroy(other.gameObject);
             TakeDamage(ShipStat.laserDamage);
         }
-    }
-    public virtual void DestroyEnemy()
-    {
-        // Invoke the event before destroying the enemy
-        if (OnEnemyDefeated != null)
-            OnEnemyDefeated.Invoke();
-
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        GameManager.instance.AddScore(scoreValue);
-        Destroy(gameObject);
     }
 }

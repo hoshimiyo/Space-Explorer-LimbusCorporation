@@ -719,6 +719,63 @@ MonoBehaviour:
   bigAsteroidChance: 0.2
   currentSpeed: 0
   currentInterval: 0
+--- !u!1001 &1052889457
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 99.54171
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 398.21585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -20.15862
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488476902945342280, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518320407726264914, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
+      propertyPath: m_Name
+      value: AudioManager (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1f6dd92bd515360498b7d8dc2c70756a, type: 3}
 --- !u!1 &1208267657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,7 +1101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1419,6 +1476,11 @@ MonoBehaviour:
     - {fileID: 3664891518696629215, guid: 4e950a041177ddc46b7c4bb2a5764f03, type: 3}
     enemyCount: 9
     spawnRate: 3
+  - enemyTypes:
+    - {fileID: 356392773465721730, guid: 9f756bdfbffd79345b373df67b3d22b7, type: 3}
+    - {fileID: 3664891518696629215, guid: 4e950a041177ddc46b7c4bb2a5764f03, type: 3}
+    enemyCount: 9
+    spawnRate: 2
   spawnPoint: {fileID: 1677687715}
   minX: -700
   maxX: 700
@@ -2369,6 +2431,6 @@ SceneRoots:
   - {fileID: 362766091}
   - {fileID: 854844065}
   - {fileID: 2036024538}
-  - {fileID: 1874975260}
+  - {fileID: 1052889457}
   - {fileID: 2067191169}
   - {fileID: 1677687715}

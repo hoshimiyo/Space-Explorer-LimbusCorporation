@@ -14,7 +14,6 @@ public class CollisionHandler : MonoBehaviour
         }
         else if (other.CompareTag("Boss"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
             Destroy(gameObject); // Remove player
             Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
             GameManager.instance.GameOver(); // Trigger game over
@@ -22,7 +21,6 @@ public class CollisionHandler : MonoBehaviour
         }
         else if (other.CompareTag("Asteroids")) // Detect asteroid, big asteroid, or enemy laser
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
             other.GetComponent<AsteroidBehavior>().TakeDamage(3);
             GetComponent<ShipControl>().TakeDamage(1);
         }
