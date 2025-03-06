@@ -7,11 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // Singleton pattern
     public int score = 0; // Player’s score
-    public GameObject explosionPrefab;
-
+    private float elapsedTime; // Elapsed time in the game
     public ProgressBar progressBar;
     [SerializeField] private float survivalTime = 45f;
-    private float elapsedTime = 0f;
     void Awake()
     {
         // Singleton pattern to ensure only one instance of GameManager exists
@@ -88,14 +86,9 @@ public class GameManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             progressBar.SetValue(elapsedTime);
-
-            if (elapsedTime >= survivalTime)
-            {
-                // Proceed to the next scene
-                SceneManager.LoadScene("Scene2");
-            }
         }
     }
+
     public void GameOver()
     {
         // Stop spaceship movement
@@ -113,5 +106,15 @@ public class GameManager : MonoBehaviour
     public void LoadEndGameScene()
     {
         SceneManager.LoadScene("EndGame"); // Load End Game Scene
+    }
+
+    public void setSurvivalTime(float time)
+    {
+        survivalTime = time;
+    }
+
+    public float getSurvivalTime()
+    {
+        return survivalTime;
     }
 }

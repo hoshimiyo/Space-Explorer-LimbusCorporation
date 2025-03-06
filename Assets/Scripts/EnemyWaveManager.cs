@@ -31,6 +31,11 @@ public class EnemyWaveManager : MonoBehaviour
         StartCoroutine(StartWaves());
     }
 
+    void Update()
+    {
+        
+    }  
+
     void CalculateTotalEnemies()
     {
         totalEnemies = 0;
@@ -38,6 +43,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             totalEnemies += wave.enemyCount;
         }
+        Debug.Log("Total enemies: " + totalEnemies);
     }
 
     IEnumerator StartWaves()
@@ -93,11 +99,6 @@ public class EnemyWaveManager : MonoBehaviour
         {
             defeatedEnemies++;
             progressBar.SetValue(defeatedEnemies);
-
-            if (defeatedEnemies >= totalEnemies)
-            {
-                SceneManager.LoadScene("Scene3");
-            }
         };
     }
 }

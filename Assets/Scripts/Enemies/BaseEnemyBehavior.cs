@@ -65,7 +65,11 @@ public class BaseEnemyBehavior : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.instance.enemyTakeDamageSound);
 
         if (health <= 0)
+        {
             DestroyEnemy();
+            OnEnemyDefeated?.Invoke();
+        }
+
     }
 
     protected IEnumerator BlinkRed()

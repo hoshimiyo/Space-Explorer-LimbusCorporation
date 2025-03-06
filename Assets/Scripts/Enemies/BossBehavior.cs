@@ -11,8 +11,14 @@ public class BossBehavior : BaseEnemyBehavior
     public ProgressBar progressBar;
     [SerializeField] private Transform[] explosionLocation;
     [SerializeField] private TextMeshProUGUI victoryTitle;
+    [SerializeField] private Canvas canvas;
+    private RectTransform healthBarRect;
     protected override void Start()
     {
+        if (progressBar != null)
+            healthBarRect = progressBar.GetComponent<RectTransform>();
+
+
         moveSpeed = 100f;
         health = 100;
         fireRate = 4f;
@@ -31,6 +37,12 @@ public class BossBehavior : BaseEnemyBehavior
         if (!entering)
         {
             HoverLeftRight();
+        }
+
+        if (transform != null && canvas != null)
+        {
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, -340f, 0));
+            healthBarRect.position = screenPos;
         }
     }
 
@@ -101,6 +113,7 @@ public class BossBehavior : BaseEnemyBehavior
 
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         this.gameObject.GetComponent<Collider2D>().enabled = false;
+        progressBar.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -143,17 +156,14 @@ public class BossBehavior : BaseEnemyBehavior
     public override void TakeDamage(int damage)
     {
         health -= damage;
+        StartCoroutine(BlinkRed());
+        AudioManager.instance.PlaySound(AudioManager.instance.enemyTakeDamageSound);
         progressBar.SetValue(health);
 
         if (health <= 0)
         {
-            Die();
+            DestroyEnemy();
         }
     }
 
-    void Die()
-    {
-        // Handle boss death (e.g., play animation, load next scene)
-        SceneManager.LoadScene("EndGame");
-    }
 }
