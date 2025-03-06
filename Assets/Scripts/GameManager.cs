@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     public int score = 0; // Player’s score
     public GameObject explosionPrefab;
 
+    public ProgressBar progressBar;
+    [SerializeField] private float survivalTime = 45f;
+    private float elapsedTime = 0f;
     void Awake()
     {
         // Singleton pattern to ensure only one instance of GameManager exists
@@ -27,8 +30,19 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        if (progressBar == null) // If not assigned in Inspector, find it
+        {
+            progressBar = FindObjectOfType<ProgressBar>();
+            if (progressBar == null)
+            {
+                Debug.LogError("ProgressBar not found in the scene! Ensure it's added and assigned.");
+            }
+        }
+
         if (SceneManager.GetActiveScene().name == "Gameplay")
         {
+            progressBar.SetMaxValue(survivalTime);
+
             // Initialize the score display
             score = 0;
             UpdateScoreUI();
@@ -68,7 +82,20 @@ public class GameManager : MonoBehaviour
     {
         UpdateScoreUI(); // Make sure the UI updates when switching scenes
     }
+    void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "Gameplay")
+        {
+            elapsedTime += Time.deltaTime;
+            progressBar.SetValue(elapsedTime);
 
+            if (elapsedTime >= survivalTime)
+            {
+                // Proceed to the next scene
+                SceneManager.LoadScene("Scene2");
+            }
+        }
+    }
     public void GameOver()
     {
         // Stop spaceship movement

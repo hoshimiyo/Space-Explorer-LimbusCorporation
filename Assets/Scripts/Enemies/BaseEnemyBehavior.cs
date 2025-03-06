@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     protected SpriteRenderer spriteRenderer;
     protected Color originalColor;
+    public event Action OnEnemyDefeated;
 
     private void Awake()
     {
@@ -72,12 +74,7 @@ public class BaseEnemyBehavior : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    public virtual void DestroyEnemy()
-    {
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        GameManager.instance.AddScore(scoreValue);
-        Destroy(gameObject);
-    }
+
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
@@ -86,5 +83,15 @@ public class BaseEnemyBehavior : MonoBehaviour
             Destroy(other.gameObject);
             TakeDamage(ShipStat.laserDamage);
         }
+    }
+    public virtual void DestroyEnemy()
+    {
+        // Invoke the event before destroying the enemy
+        if (OnEnemyDefeated != null)
+            OnEnemyDefeated.Invoke();
+
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        GameManager.instance.AddScore(scoreValue);
+        Destroy(gameObject);
     }
 }

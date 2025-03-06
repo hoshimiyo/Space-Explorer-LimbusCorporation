@@ -18,11 +18,26 @@ public class EnemyWaveManager : MonoBehaviour
     public float timeBetweenWaves = 5f; // Delay between waves
     private int currentWaveIndex = 0;
     [SerializeField] private GameObject transitionPanel;
+    public ProgressBar progressBar; 
+
+    private int totalEnemies;
+    private int defeatedEnemies;
 
     void Start()
     {
-        transitionPanel.SetActive(false); // ✅ Hide the transition panel
+        transitionPanel.SetActive(false); // Hide the transition panel
+        CalculateTotalEnemies();
+        progressBar.SetMaxValue(totalEnemies); // Set the max value of the progress bar
         StartCoroutine(StartWaves());
+    }
+
+    void CalculateTotalEnemies()
+    {
+        totalEnemies = 0;
+        foreach (Wave wave in waves)
+        {
+            totalEnemies += wave.enemyCount;
+        }
     }
 
     IEnumerator StartWaves()
@@ -33,18 +48,18 @@ public class EnemyWaveManager : MonoBehaviour
             StartCoroutine(SpawnWave(waves[currentWaveIndex]));
             currentWaveIndex++;
         }
-        AsteroidSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
-        StarScript.stopSpawner = false; // ✅ Disable spawner before transitioning
-        PowerUpSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
-        // ✅ Wait until all enemies are gone
+        AsteroidSpawner.stopSpawner = false; // Disable spawner before transitioning
+        StarScript.stopSpawner = false; // Disable spawner before transitioning
+        PowerUpSpawner.stopSpawner = false; // Disable spawner before transitioning
+        // Wait until all enemies are gone
         yield return new WaitUntil(() => GameObject.FindGameObjectsWithTag("Enemies").Length == 0);
 
-        // ✅ Show "Wave Cleared" notification
+        // Show "Wave Cleared" notification
         Debug.Log("Finish");
 
-        yield return new WaitForSeconds(5f); // ✅ Wait 5 sec before transition
-        Time.timeScale = 0; // ✅ Pause the game
-        // ✅ Transition to the next scene
+        yield return new WaitForSeconds(5f); // Wait 5 sec before transition
+        Time.timeScale = 0; // Pause the game
+        // Transition to the next scene
         transitionPanel.SetActive(true);
     }
 
@@ -72,5 +87,17 @@ public class EnemyWaveManager : MonoBehaviour
 
         // Make the enemy fly down
         enemy.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, -25f);
+
+        // Update progress bar when an enemy is defeated
+        enemy.GetComponent<BaseEnemyBehavior>().OnEnemyDefeated += () =>
+        {
+            defeatedEnemies++;
+            progressBar.SetValue(defeatedEnemies);
+
+            if (defeatedEnemies >= totalEnemies)
+            {
+                SceneManager.LoadScene("Scene3");
+            }
+        };
     }
 }

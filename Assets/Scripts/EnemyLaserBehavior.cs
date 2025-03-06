@@ -7,7 +7,7 @@ public class EnemyLaserBehavior : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector2.down * speed * Time.deltaTime); // Move laser downward
-        if(transform.position.y < -455)
+        if (transform.position.y < -455)
         {
             Destroy(gameObject);
         }

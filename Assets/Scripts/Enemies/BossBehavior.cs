@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class BossBehavior : BaseEnemyBehavior
 {
     private bool entering = true;
     [SerializeField] private float stopYPosition = 271f; // Y position where the boss stops moving
     public GameObject minionPrefab;
-
+    public ProgressBar progressBar;
     protected override void Start()
     {
         moveSpeed = 100f;
@@ -15,6 +15,10 @@ public class BossBehavior : BaseEnemyBehavior
         scoreValue = 10000;
         EnterScreen(moveSpeed);
         base.Start();
+
+        // Set the max value of the progress bar to the boss's initial health
+        progressBar.SetMaxValue(health);
+
         InvokeRepeating("SpawnMinions", 5f, 10f);
     }
 
@@ -51,7 +55,6 @@ public class BossBehavior : BaseEnemyBehavior
         transform.position = new Vector3(startPosition.x + xPosition, transform.position.y, transform.position.z);
     }
 
-
     protected override void FireLaser()
     {
         int numberOfLasers = 5; // Number of lasers fired at once
@@ -71,7 +74,6 @@ public class BossBehavior : BaseEnemyBehavior
                 laser.GetComponent<Rigidbody2D>().linearVelocity = direction * 5f;
             }
         }
-
     }
 
     void SpawnMinions()
@@ -83,9 +85,26 @@ public class BossBehavior : BaseEnemyBehavior
     public override void DestroyEnemy()
     {
         CancelInvoke("SpawnMinions");
-        AsteroidSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
-        StarScript.stopSpawner = false; // ✅ Disable spawner before transitioning
-        PowerUpSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning
+        AsteroidSpawner.stopSpawner = false; // Disable spawner before transitioning
+        StarScript.stopSpawner = false; // Disable spawner before transitioning
+        PowerUpSpawner.stopSpawner = false; // Disable spawner before transitioning
         base.DestroyEnemy();
+    }
+
+    public override void TakeDamage(int damage)
+    {
+        health -= damage;
+        progressBar.SetValue(health);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        // Handle boss death (e.g., play animation, load next scene)
+        SceneManager.LoadScene("EndGame");
     }
 }
