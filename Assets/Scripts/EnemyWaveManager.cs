@@ -17,7 +17,6 @@ public class EnemyWaveManager : MonoBehaviour
     public float minX = -700f, maxX = 700f; // Random X range
     public float timeBetweenWaves = 5f; // Delay between waves
     private int currentWaveIndex = 0;
-    public GameObject instance;
     [SerializeField] private GameObject transitionPanel;
 
     void Start()

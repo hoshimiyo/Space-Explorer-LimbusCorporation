@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ShipControl : MonoBehaviour
 {
+    public GameObject explosionPrefab;
     public float moveSpeed = 500f;
     private Vector2 screenBounds;
     private float shipWidth, shipHeight;
@@ -289,7 +290,7 @@ public class ShipControl : MonoBehaviour
         if (ShipStat.health <= 0)
         {
             Destroy(gameObject); // Destroy the player ship
-            Instantiate(GameManager.instance.explosionPrefab, gameObject.transform.position, Quaternion.identity); // Explosion effect
+            Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity); // Explosion effect
             GameManager.instance.GameOver(); // Trigger game over
         }
         else

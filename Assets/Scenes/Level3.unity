@@ -1251,6 +1251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa3a6d8fa8b4c04ab923a42706bd2a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
   moveSpeed: 500
   laserPrefab: {fileID: 7221946140573901543, guid: 348dfc9e09d737d4282a342d733de75a, type: 3}
   laserPrefab2: {fileID: 7221946140573901543, guid: dad2e70b4ea7fd744a1614ddf91bb649, type: 3}

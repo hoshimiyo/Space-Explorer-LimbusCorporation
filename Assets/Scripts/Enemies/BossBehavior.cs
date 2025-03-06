@@ -15,7 +15,6 @@ public class BossBehavior : BaseEnemyBehavior
         scoreValue = 10000;
         EnterScreen(moveSpeed);
         base.Start();
-
         InvokeRepeating("SpawnMinions", 5f, 10f);
     }
 
@@ -48,7 +47,7 @@ public class BossBehavior : BaseEnemyBehavior
         float hoverDistance = 380f; // Adjust how far it moves left and right
         float hoverSpeed = 1f; // Adjust how fast it moves
 
-        float xPosition = Mathf.Sin(Time.time * hoverSpeed) * hoverDistance;
+        float xPosition = Mathf.Sin(Time.timeSinceLevelLoad * hoverSpeed) * hoverDistance;
         transform.position = new Vector3(startPosition.x + xPosition, transform.position.y, transform.position.z);
     }
 

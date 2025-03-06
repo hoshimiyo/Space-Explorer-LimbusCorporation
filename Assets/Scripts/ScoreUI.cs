@@ -33,6 +33,7 @@ public class ScoreUI : MonoBehaviour
             if (ShipStat.health <= 0)
             {
                 lives.text = "Lives: 0";
+                return;
             }
 
             lives.text = "Lives: " + ShipStat.health;
