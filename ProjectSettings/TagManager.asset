@@ -12,6 +12,7 @@ TagManager:
   - Enemies
   - Laser
   - Boss
+  - EnemyLaser
   layers:
   - Default
   - TransparentFX

@@ -76,7 +76,7 @@ public class BigAsteroidBehavior : MonoBehaviour
         SpawnStars(3);
 
         // 20% chance to spawn a power-up
-        if (Random.value <= 0.2f)
+        if (Random.value <= 1f)
         {
             SpawnPowerUp();
         }
@@ -110,13 +110,20 @@ public class BigAsteroidBehavior : MonoBehaviour
         if (powerUpPrefab != null)
         {
             GameObject powerUpInstance = Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
+            spriteRenderer = powerUpInstance.GetComponent<SpriteRenderer>();    
 
             // Assign a random power-up type
             PowerUp powerUpScript = powerUpInstance.GetComponent<PowerUp>();
             if (powerUpScript != null)
             {
                 powerUpScript.powerUpType = (PowerUp.PowerUpType)Random.Range(0, 3); // Random type
-                powerUpScript.SetPowerUpColor(); // Apply correct color
+                powerUpScript.SetPowerUpColor(powerUpScript.powerUpType, spriteRenderer); // Apply correct color
+            }
+
+            Rigidbody2D rb = powerUpInstance.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = new Vector2(0, -20f); // Assign downward velocity
             }
         }
     }
@@ -126,11 +133,5 @@ public class BigAsteroidBehavior : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-    IEnumerator BlinkRed()
-    {
-        spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
     }
 }

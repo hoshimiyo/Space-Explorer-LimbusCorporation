@@ -4,27 +4,38 @@ using UnityEngine.UI;
 
 public class ScoreUI : MonoBehaviour
 {
-    private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI lives;
 
     void Start()
     {
-        scoreText = GetComponent<TextMeshProUGUI>(); // Find the UI Text in the scene
         UpdateScoreUI();
+
     }
 
-    //void Update()
-    //{
-    //    if (scoreText != null)
-    //    {
-    //        scoreText.text = "Score: " + GameManager.instance.GetScore();
-    //    }
-    //}
+    void Update()
+    {
+        LifeUI();
+    }
 
     public void UpdateScoreUI()
     {
         if (scoreText != null)
         {
             scoreText.text = "Score: " + GameManager.instance.GetScore();
+        }
+    }
+
+    public void LifeUI()
+    {
+        if (lives != null)
+        {
+            if (ShipStat.health <= 0)
+            {
+                lives.text = "Lives: 0";
+            }
+
+            lives.text = "Lives: " + ShipStat.health;
         }
     }
 }

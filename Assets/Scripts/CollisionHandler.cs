@@ -20,7 +20,7 @@ public class CollisionHandler : MonoBehaviour
             GameManager.instance.GameOver(); // Trigger game over
             Debug.Log("skill issue");
         }
-        else if (other.CompareTag("Asteroids") || other.CompareTag("Enemies")) // Detect asteroid, big asteroid, or enemy laser
+        else if (other.CompareTag("Asteroids")) // Detect asteroid, big asteroid, or enemy laser
         {
             AudioManager.instance.PlaySound(AudioManager.instance.explosionSound); // Play explosion sound
             other.GetComponent<AsteroidBehavior>().TakeDamage(3);
@@ -31,6 +31,16 @@ public class CollisionHandler : MonoBehaviour
             other.GetComponent<BigAsteroidBehavior>().TakeDamage(3);
             GetComponent<ShipControl>().TakeDamage(3);
             Debug.Log("skill issue");
+        }
+        else if (other.CompareTag("Enemies"))
+        {
+            other.GetComponent<BaseEnemyBehavior>().DestroyEnemy();
+            GetComponent<ShipControl>().TakeDamage(1);    
+        }
+        else if (other.CompareTag("EnemyLaser"))
+        {
+            Destroy(other.gameObject); // Remove enemy laser
+            GetComponent<ShipControl>().TakeDamage(1);
         }
     }
 }

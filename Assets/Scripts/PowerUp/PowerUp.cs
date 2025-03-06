@@ -10,7 +10,7 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetPowerUpColor();
+        SetPowerUpColor(powerUpType, spriteRenderer);
     }
 
     void Update()
@@ -21,18 +21,18 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    public void SetPowerUpColor()
+    public void SetPowerUpColor(PowerUpType _powerUpType, SpriteRenderer _spriteRenderer)
     {
-        switch (powerUpType)
+        switch (_powerUpType)
         {
             case PowerUpType.LaserSpread:
-                spriteRenderer.color = Color.green; // Green for speed
+                _spriteRenderer.color = Color.green; // Green for speed
                 break;
             case PowerUpType.Shield:
-                spriteRenderer.color = Color.blue; // Blue for shield
+                _spriteRenderer.color = Color.blue; // Blue for shield
                 break;
             case PowerUpType.LaserPenetrate:
-                spriteRenderer.color = Color.red; // Red for laser upgrade
+                _spriteRenderer.color = Color.red; // Red for laser upgrade
                 break;
         }
     }

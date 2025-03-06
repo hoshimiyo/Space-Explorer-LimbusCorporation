@@ -52,6 +52,7 @@ public class BossBehavior : BaseEnemyBehavior
         transform.position = new Vector3(startPosition.x + xPosition, transform.position.y, transform.position.z);
     }
 
+
     protected override void FireLaser()
     {
         int numberOfLasers = 5; // Number of lasers fired at once
@@ -80,7 +81,7 @@ public class BossBehavior : BaseEnemyBehavior
         Instantiate(minionPrefab, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
     }
 
-    protected override void DestroyEnemy()
+    public override void DestroyEnemy()
     {
         CancelInvoke("SpawnMinions");
         AsteroidSpawner.stopSpawner = false; // ✅ Disable spawner before transitioning

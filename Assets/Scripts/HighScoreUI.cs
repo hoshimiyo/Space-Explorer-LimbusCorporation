@@ -42,7 +42,7 @@ public class HighScoreUI : MonoBehaviour
                 if(i >= highScoreElements.Count)
                 {
                     var inst = Instantiate(highScoreElementPrefab, Vector3.zero, Quaternion.identity);
-                    inst.transform.SetParent(elementWrapper);
+                    inst.transform.SetParent(elementWrapper, false);
 
                     highScoreElements.Add(inst);
                 }

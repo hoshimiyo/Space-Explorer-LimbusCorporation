@@ -72,9 +72,10 @@ public class BaseEnemyBehavior : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    protected virtual void DestroyEnemy()
+    public virtual void DestroyEnemy()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        GameManager.instance.AddScore(scoreValue);
         Destroy(gameObject);
     }
 
@@ -83,7 +84,7 @@ public class BaseEnemyBehavior : MonoBehaviour
         if (other.CompareTag("Laser"))
         {
             Destroy(other.gameObject);
-            TakeDamage();
+            TakeDamage(ShipStat.laserDamage);
         }
     }
 }
