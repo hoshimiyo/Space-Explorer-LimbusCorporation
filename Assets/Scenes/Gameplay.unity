@@ -1410,7 +1410,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1201287726}
-  - component: {fileID: 1201287725}
+  - component: {fileID: 1201287727}
   m_Layer: 0
   m_Name: SceneTransition
   m_TagString: Untagged
@@ -1418,20 +1418,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1201287725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201287724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayBeforeTransition: 10
-  transitionPanel: {fileID: 840882894}
 --- !u!4 &1201287726
 Transform:
   m_ObjectHideFlags: 0
@@ -1447,6 +1433,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1201287727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201287724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1c955bc24021c479d82928ef8c598c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delayBeforeTransition: 45
+  transitionPanel: {fileID: 840882894}
 --- !u!1 &1287468206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,7 +1868,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
   moveSpeed: 500
   laserPrefab: {fileID: 7221946140573901543, guid: 348dfc9e09d737d4282a342d733de75a, type: 3}
-  laserPrefab2: {fileID: 0}
+  laserPrefab2: {fileID: 7221946140573901543, guid: dad2e70b4ea7fd744a1614ddf91bb649, type: 3}
   laserSpawnPoint: {fileID: 1694040316}
   laserCount: 1
 --- !u!212 &1694040315

@@ -14,9 +14,8 @@ public class CollisionHandler : MonoBehaviour
         }
         else if (other.CompareTag("Boss"))
         {
-            Destroy(gameObject); // Remove player
-            Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
-            GameManager.instance.GameOver(); // Trigger game over
+            GetComponent<ShipControl>().TakeDamage(99);
+            GetComponent<BossBehavior>().TakeDamage(3);
             Debug.Log("skill issue");
         }
         else if (other.CompareTag("Asteroids")) // Detect asteroid, big asteroid, or enemy laser

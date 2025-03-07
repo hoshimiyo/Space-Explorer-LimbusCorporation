@@ -27,14 +27,15 @@ public class EnemyWaveManager : MonoBehaviour
     {
         transitionPanel.SetActive(false); // Hide the transition panel
         CalculateTotalEnemies();
+        Debug.Log("Total :"+ totalEnemies);
         progressBar.SetMaxValue(totalEnemies); // Set the max value of the progress bar
         StartCoroutine(StartWaves());
     }
 
     void Update()
     {
-        
-    }  
+        progressBar.SetValue(defeatedEnemies);
+    }
 
     void CalculateTotalEnemies()
     {
@@ -101,4 +102,5 @@ public class EnemyWaveManager : MonoBehaviour
             progressBar.SetValue(defeatedEnemies);
         };
     }
+
 }

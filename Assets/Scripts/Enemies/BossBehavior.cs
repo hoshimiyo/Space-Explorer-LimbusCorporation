@@ -34,6 +34,7 @@ public class BossBehavior : BaseEnemyBehavior
 
     protected override void Update()
     {
+        progressBar.SetValue(100 - health);
         if (!entering)
         {
             HoverLeftRight();

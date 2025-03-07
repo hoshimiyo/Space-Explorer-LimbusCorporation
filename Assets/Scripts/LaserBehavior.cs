@@ -35,5 +35,10 @@ public class LaserBehavior : MonoBehaviour
             other.GetComponent<BossBehavior>().TakeDamage(ShipStat.laserDamage);
             Destroy(gameObject);
         }
+        else if (other.CompareTag("Enemies"))
+        {
+            other.GetComponent<BaseEnemyBehavior>().TakeDamage(ShipStat.laserDamage);
+            Destroy(gameObject);
+        }
     }
 }
