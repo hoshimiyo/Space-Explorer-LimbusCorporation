@@ -49,19 +49,22 @@ public class HomingLaserBehavior : MonoBehaviour
     {
         if (other.CompareTag("Asteroids"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
             other.GetComponent<AsteroidBehavior>().TakeDamage(ShipStat.laserDamage);
             Destroy(gameObject);
         }
         else if (other.CompareTag("BigAsteroid"))
         {
-            AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
             other.GetComponent<BigAsteroidBehavior>().TakeDamage(ShipStat.laserDamage);
+            Destroy(gameObject);
+        }
+        else if (other.CompareTag("Enemies"))
+        {
+            other.GetComponent<BaseEnemyBehavior>().TakeDamage(ShipStat.laserDamage);
             Destroy(gameObject);
         }
         else if (other.CompareTag("Boss"))
         {
-            other.GetComponent<BossBehavior>().TakeDamage(ShipStat.laserDamage);
+            other.GetComponent<BaseEnemyBehavior>().TakeDamage(ShipStat.laserDamage);
             Destroy(gameObject);
         }
     }

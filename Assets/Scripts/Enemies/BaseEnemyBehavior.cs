@@ -81,18 +81,13 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     public virtual void DestroyEnemy()
     {
+        // Invoke the event before destroying the enemy
+        if (OnEnemyDefeated != null)
+            OnEnemyDefeated.Invoke();
+
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         AudioManager.instance.PlaySound(AudioManager.instance.explosionSound);
         GameManager.instance.AddScore(scoreValue);
         Destroy(gameObject);
-    }
-
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Laser"))
-        {
-            Destroy(other.gameObject);
-            TakeDamage(ShipStat.laserDamage);
-        }
     }
 }
