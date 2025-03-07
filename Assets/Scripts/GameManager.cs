@@ -28,8 +28,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        ShipStat.ResetStat();
         if (progressBar == null) // If not assigned in Inspector, find it
         {
+        
             progressBar = FindAnyObjectByType<ProgressBar>();
             if (progressBar == null)
             {
