@@ -78,7 +78,7 @@ public class BigAsteroidBehavior : MonoBehaviour
         SpawnStars(3);
 
         // 20% chance to spawn a power-up
-        if (Random.value <= 1f)
+        if (Random.value <= 0.2f)
         {
             SpawnPowerUp();
         }
